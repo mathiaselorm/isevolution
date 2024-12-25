@@ -305,12 +305,18 @@ To quickly run the application locally, follow these streamlined steps:
  ```
 
 4. **Configure Environment Variables:**
+Before running the project, create a `.env` file in the root directory with the following content:
 
- ```bash
-    cp .env.example .env
+```plaintext
+SECRET_KEY=replace_with_a_secure_key   # Replace with a secure key generated using Django's utility
+DEBUG=True
+DATABASE_URL=sqlite:///db.sqlite3   # Replace with your actual database credentials
 ```
 
-- Open the `.env` file and replace placeholder values with your actual configurations.
+If you don't create a `.env` file, the project will run with the following default settings:
+- `SECRET_KEY`: `django-insecure-default-key-for-testing`
+- `DEBUG`: `True`
+- Database: SQLite (`db.sqlite3`)
 
 5. **Apply Migrations and Create Superuser:**
 
@@ -352,16 +358,18 @@ python manage.py test
 Before running the project, create a `.env` file in the root directory with the following content:
 
 ```plaintext
-SECRET_KEY=replace_with_a_secure_key
+SECRET_KEY=replace_with_a_secure_key   # Replace with a secure key generated using Django's utility
 DEBUG=True
-DATABASE_URL=sqlite:///db.sqlite3
+DATABASE_URL=sqlite:///db.sqlite3   # Replace with your actual database credentials
+```
+
 ### Purpose
 The `.env` file stores sensitive configuration details for the project, such as the `SECRET_KEY` and `DEBUG` settings, to keep them secure and separate from the codebase.
-```
+
 ### Running Without a `.env` File
 If you don't create a `.env` file, the project will run with the following default settings:
 - `SECRET_KEY`: `django-insecure-default-key-for-testing`
 - `DEBUG`: `True`
 - Database: SQLite (`db.sqlite3`)
 
-However, it is recommended to create a `.env` file for custom configurations.
+However, I recommended you create a `.env` file for custom configurations.
