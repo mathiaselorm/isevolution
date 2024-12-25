@@ -1,6 +1,8 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
+import django.core.exceptions
+from rest_framework.exceptions import ValidationError as DRFValidationError
 
 from .models import Product
 from .serializers import ProductReadSerializer, ProductWriteSerializer
@@ -44,7 +46,10 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
         """
         Automatically set the tenant to the current user's tenant.
         """
-        serializer.save(tenant=self.request.user.tenant)
+        try:
+            serializer.save(tenant=self.request.user.tenant)
+        except django.core.exceptions.ValidationError as e:
+            raise DRFValidationError(e.message_dict)
 
 
 class ProductRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):

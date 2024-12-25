@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from model_utils.models import TimeStampedModel
+from django.core.exceptions import ValidationError
 
 
 class Tenant(TimeStampedModel):
@@ -65,6 +66,14 @@ class Product(TimeStampedModel):
                 name='unique_product_per_tenant'
             )
         ]
+        
+    def clean(self):
+        if Product.objects.filter(tenant=self.tenant, name=self.name).exclude(pk=self.pk).exists():
+            raise ValidationError({"name": f"Product with name '{self.name}' already exists for the tenant '{self.tenant.name}'."})
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} ({self.tenant.name})"

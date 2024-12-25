@@ -8,11 +8,10 @@ class ProductWriteSerializer(serializers.ModelSerializer):
     """
     Serializer for creating or updating Product objects.
     """
-    tenant = serializers.PrimaryKeyRelatedField(queryset=Tenant.objects.all())
 
     class Meta:
         model = Product
-        fields = ['tenant', 'name', 'description', 'price', 'quantity']
+        fields = ['name', 'description', 'price', 'quantity']
 
 
 class ProductReadSerializer(serializers.ModelSerializer):

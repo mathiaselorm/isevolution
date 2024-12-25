@@ -2,12 +2,23 @@
 from datetime import timedelta
 from pathlib import Path
 
+import os
+import environ
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure--=$8j(dvi#-$f3vg3e6-0@yd2mznfjo5r^_xj^xva&g&#f$p%2'
-DEBUG = True
-ALLOWED_HOSTS = []
 
+
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+SECRET_KEY = env('SECRET_KEY', default='django-insecure-default-key-for-testing')
+
+
+DEBUG = env('DEBUG', default=True)
+
+
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -76,10 +87,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': env.db('DATABASE_URL', default='sqlite:///db.sqlite3')
 }
 
 
