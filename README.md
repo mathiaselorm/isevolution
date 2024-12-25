@@ -15,12 +15,14 @@
     - [Obtaining JWT Tokens](#obtaining-jwt-tokens)
     - [Using JWT Tokens for Authenticated Requests](#using-jwt-tokens-for-authenticated-requests)
 5. [Quickstart](#quickstart)
+6. - [Running Tests](#running-tests)
+7. - [Setting Up Environment Variables](#setting-up-environment-variables)
 
 
 
-## Project Description
+## 1. Project Description
 
-The IS EVOLUTION TASK API is a Django-based multi-tenant application designed to provide tenant-specific isolation for managing products. Built using the Django Rest Framework (DRF), the application ensures that each tenant (organization) has exclusive access to its data while offering core functionalities for user authentication, tenant-aware access control, and robust RESTful APIs for managing products. Authentication is implemented using JSON Web Tokens (JWT) via the Simple JWT library.
+The IS EVOLUTION TASK API is a Django-based multi-tenant application designed to provide tenant-specific isolation for managing products. Built using Django and Django Rest Framework (DRF), the application ensures that each tenant (organization) has exclusive access to its data while offering core functionalities for user authentication, tenant-aware access control, and robust RESTful APIs for managing products. Authentication is implemented using JSON Web Tokens (JWT) via the Simple JWT library.
 
 ### Database Schema
 
@@ -65,7 +67,7 @@ def get_queryset(self):
     return Product.objects.filter(tenant=self.request.user.tenant)
 ```
 
-### Serializer Handling
+### 2. Serializer Handling
 
 While creating a product, the `tenant` field is automatically set to the current user's tenant within the `perform_create` method, ensuring that products are always associated with the correct tenant:
 
@@ -184,20 +186,20 @@ ReDoc offers a clean and customizable documentation interface, providing an alte
 - **Ease of Navigation:** Easily navigate through different API sections and endpoints.
 
 
-## Testing the API
+## 4. Testing the API
 
-Testing the **IS EVOLUTION TASK API** involves interacting with its endpoints using tools like Postman or cURL. Below are detailed instructions on how to authenticate and perform CRUD operations on the Product model.
+Testing the **IS EVOLUTION TASK API** involves interacting with its endpoints using tools like Postman or cURL. This section provides step-by-step instructions on authenticating and performing CRUD operations on the Product model.
 
----
 
 ### 4.1. Obtaining JWT Tokens
 
-To interact with the API endpoints, you must first authenticate and obtain JWT tokens.
+Before accessing secured API endpoints, you must authenticate to receive a pair of JWT tokens: an access token and a refresh token.
 
-- **Endpoint:** Obtain Token Pair  
-- **URL:** [http://127.0.0.1:8000/api/login/](http://127.0.0.1:8000/api/login/)  
+
+- **Endpoint:** `/api/login/`  
 - **Method:** `POST`  
-- **Description:** Authenticates a user and returns an access and refresh token pair.
+- **URL:** [http://127.0.0.1:8000/api/login/](http://127.0.0.1:8000/api/login/)  
+- **Purpose:** Authenticates a user using their username and password, returning an access token (for authenticated API requests) and a refresh token (for renewing expired access tokens).  
 
 #### Request Payload:
 ```json
@@ -206,21 +208,62 @@ To interact with the API endpoints, you must first authenticate and obtain JWT t
   "password": "your_password"
 }
 ```
+
+#### Response:
+```json
+{
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIs...",
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIs..."
+}
+```
+
 - The access token is used for authenticating API requests.
 - The refresh token is used to obtain new access tokens when the current one expires.
 
 ### 4.2. Using JWT Tokens for Authenticated Requests
 
-To make authenticated requests, include the access token in the `Authorization` header.
+Once you have obtained a JWT access token, include it in the `Authorization` header to authenticate API requests.
 
-- **Header:** `Authorization: Bearer <access_token>`
+### Steps to Use JWT Tokens for Authenticated Requests
 
-#### Example using Postman:
-1. Open Postman and create a new request.
-2. Under the **Headers** tab, add a new header:
-   - **Key:** `Authorization`
-   - **Value:** `Bearer <access_token>`
-3. Proceed to make your API request.
+#### 1. Create a New Request
+- Open Postman and click **New Request**.
+- Set the method to the desired HTTP method (`GET`, `POST`, etc.).
+- Specify the endpoint URL for the API you want to access (e.g., `http://127.0.0.1:8000/api/products/`).
+
+#### 2. Set Authorization Token
+- Navigate to the **Authorization** tab in Postman.
+- From the dropdown, select **Bearer Token**.
+- In the **Token** field, paste your JWT access token.
+
+#### 3. Add Request Data (if required)
+- If the request requires a body (e.g., for `POST` or `PUT` methods):
+  - Navigate to the **Body** tab.
+  - Select **raw** and set the format to `JSON`.
+  - Provide the necessary JSON payload.
+
+#### 4. Send the Request
+- Click **Send**.
+
+#### 5. Review the Response
+- If authenticated successfully:
+  - **Status:** `200 OK` or other appropriate success status.
+  - **Body:** The API's response data.
+
+#### Example
+- **Authorization Tab:**
+  - **Type:** Bearer Token
+  - **Token:** `<access_token>`
+
+- **Request Body (if required):**
+```json
+  {
+      "name": "Example Product",
+      "description": "A sample product",
+      "price": 19.99,
+      "quantity": 100
+  }
+```
 
 
 ## Key API Endpoints
@@ -238,7 +281,7 @@ The Swagger and ReDoc documentation provide all the necessary information for te
 
 
 
-## Quickstart
+## 5. Quickstart
 To quickly run the application locally, follow these streamlined steps:
 
 1. **Clone the Repository:**
@@ -292,7 +335,7 @@ To quickly run the application locally, follow these streamlined steps:
     - **ReDoc:** [http://127.0.0.1:8000/redoc/](http://127.0.0.1:8000/redoc/)
 
 
-### Running Tests
+### 6. Running Tests
 To ensure the application is functioning correctly, you can run the test suite:
 
 ```bash
@@ -305,7 +348,7 @@ python manage.py test
 - Authentication flows.
 
 
-### Setting Up Environment Variables
+### 7. Setting Up Environment Variables
 Before running the project, create a `.env` file in the root directory with the following content:
 
 ```plaintext
