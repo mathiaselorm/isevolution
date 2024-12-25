@@ -17,6 +17,8 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Product.objects.none()
         return Product.objects.filter(tenant=self.request.user.tenant)
 
     def get_serializer_class(self):
@@ -59,6 +61,8 @@ class ProductRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView)
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Product.objects.none()
         return Product.objects.filter(tenant=self.request.user.tenant)
 
     def get_serializer_class(self):
