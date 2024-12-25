@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tenant, Product
+from .models import Product
 
 
 
