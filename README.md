@@ -15,8 +15,8 @@
     - [Obtaining JWT Tokens](#obtaining-jwt-tokens)
     - [Using JWT Tokens for Authenticated Requests](#using-jwt-tokens-for-authenticated-requests)
 5. [Quickstart](#quickstart)
-6. - [Running Tests](#running-tests)
-7. - [Setting Up Environment Variables](#setting-up-environment-variables)
+6. [Running Tests](#running-tests)
+7. [Setting Up Environment Variables](#setting-up-environment-variables)
 
 
 
